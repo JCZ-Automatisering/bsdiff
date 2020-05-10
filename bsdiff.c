@@ -1,6 +1,7 @@
 /*-
  * Copyright 2003-2005 Colin Percival
  * Copyright 2012 Matthew Endsley
+ * Copyright 2020 JCZ-Automatisering - Jaap Crezee
  * All rights reserved
  *
  * Redistribution and use in source and binary forms, with or without
@@ -321,7 +322,7 @@ static int bsdiff_internal(const struct bsdiff_request req)
 	return 0;
 }
 
-int bsdiff(const uint8_t* old, int64_t oldsize, const uint8_t* new, int64_t newsize, struct bsdiff_stream* stream)
+int bsdiff(const uint8_t* old_ptr, int64_t oldsize, const uint8_t* new_ptr, int64_t newsize, struct bsdiff_stream* stream)
 {
 	int result;
 	struct bsdiff_request req;
@@ -335,9 +336,9 @@ int bsdiff(const uint8_t* old, int64_t oldsize, const uint8_t* new, int64_t news
 		return -1;
 	}
 
-	req.old = old;
+    req.old = old_ptr;
 	req.oldsize = oldsize;
-	req.new = new;
+    req.new = new_ptr;
 	req.newsize = newsize;
 	req.stream = stream;
 

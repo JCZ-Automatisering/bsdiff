@@ -1,6 +1,7 @@
 /*-
  * Copyright 2003-2005 Colin Percival
  * Copyright 2012 Matthew Endsley
+ * Copyright 2020 JCZ-Automatisering - Jaap Crezee
  * All rights reserved
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,7 +46,7 @@ static int64_t offtin(uint8_t *buf)
 	return y;
 }
 
-int bspatch(const uint8_t* old, int64_t oldsize, uint8_t* new, int64_t newsize, struct bspatch_stream* stream)
+int bspatch(const uint8_t* old_ptr, int64_t oldsize, uint8_t* new_ptr, int64_t newsize, struct bspatch_stream* stream)
 {
 	uint8_t buf[8];
 	int64_t oldpos,newpos;
@@ -66,13 +67,13 @@ int bspatch(const uint8_t* old, int64_t oldsize, uint8_t* new, int64_t newsize, 
 			return -1;
 
 		/* Read diff string */
-		if (stream->read(stream, new + newpos, ctrl[0]))
+        if (stream->read(stream, new_ptr + newpos, ctrl[0]))
 			return -1;
 
 		/* Add old data to diff string */
 		for(i=0;i<ctrl[0];i++)
 			if((oldpos+i>=0) && (oldpos+i<oldsize))
-				new[newpos+i]+=old[oldpos+i];
+                new_ptr[newpos+i]+=old_ptr[oldpos+i];
 
 		/* Adjust pointers */
 		newpos+=ctrl[0];
@@ -83,7 +84,7 @@ int bspatch(const uint8_t* old, int64_t oldsize, uint8_t* new, int64_t newsize, 
 			return -1;
 
 		/* Read extra string */
-		if (stream->read(stream, new + newpos, ctrl[1]))
+        if (stream->read(stream, new_ptr + newpos, ctrl[1]))
 			return -1;
 
 		/* Adjust pointers */
